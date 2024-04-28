@@ -7,13 +7,13 @@ const char* ssid = "WIFI";
 const char* password = "PejsSkorstenSky";
 
 // webServer pages
-const char* PARAM_STRING = "inputString";
-const char* PARAM_INT = "inputInt";
-const char* PARAM_FLOAT = "inputFloat";
+const char* PARAM_SSID = "inputSSID";
+const char* PARAM_PW = "inputPW";
+const char* PARAM_PID = "inputPID";
 
 AsyncWebServer server(80);
 
-// HTML web page to handle 3 input fields (inputString, inputInt, inputFloat)
+// HTML web page to handle 3 input fields (inputSSID, inputPW, inputPID)
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html><head>
   <title>ESP Input Form</title>
@@ -25,15 +25,15 @@ const char index_html[] PROGMEM = R"rawliteral(
     }
   </script></head><body>
   <form action="/get" target="hidden-form">
-    inputString (current value %inputString%): <input type="text" name="inputString">
+    inputSSID (current value %inputSSID%): <input type="text" name="inputSSID">
     <input type="submit" value="Submit" onclick="submitMessage()">
   </form><br>
   <form action="/get" target="hidden-form">
-    inputInt (current value %inputInt%): <input type="number " name="inputInt">
+    inputPW (current value %inputPW%): <input type="number " name="inputPW">
     <input type="submit" value="Submit" onclick="submitMessage()">
   </form><br>
   <form action="/get" target="hidden-form">
-    inputFloat (current value %inputFloat%): <input type="number " name="inputFloat">
+    inputPID (current value %inputPID%): <input type="number " name="inputPID">
     <input type="submit" value="Submit" onclick="submitMessage()">
   </form>
   <iframe style="display:none" name="hidden-form"></iframe>
@@ -78,14 +78,14 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
 // Replaces placeholder with stored values
 String processor(const String& var){
   //Serial.println(var);
-  if(var == "inputString"){
-    return readFile(SPIFFS, "/inputString.txt");
+  if(var == "inputSSID"){
+    return readFile(SPIFFS, "/inputSSID.txt");
   }
-  else if(var == "inputInt"){
-    return readFile(SPIFFS, "/inputInt.txt");
+  else if(var == "inputPW"){
+    return readFile(SPIFFS, "/inputPW.txt");
   }
-  else if(var == "inputFloat"){
-    return readFile(SPIFFS, "/inputFloat.txt");
+  else if(var == "inputPID"){
+    return readFile(SPIFFS, "/inputPID.txt");
   }
   return String();
 }
@@ -152,23 +152,23 @@ void setup(){
     request->send_P(200, "text/html", index_html, processor);
   });
 
-  // Send a GET request to <ESP_IP>/get?inputString=<inputMessage>
+  // Send a GET request to <ESP_IP>/get?inputSSID=<inputMessage>
   server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
     String inputMessage;
-    // GET inputString value on <ESP_IP>/get?inputString=<inputMessage>
-    if (request->hasParam(PARAM_STRING)) {
-      inputMessage = request->getParam(PARAM_STRING)->value();
-      writeFile(SPIFFS, "/inputString.txt", inputMessage.c_str());
+    // GET inputSSID value on <ESP_IP>/get?inputSSID=<inputMessage>
+    if (request->hasParam(PARAM_SSID)) {
+      inputMessage = request->getParam(PARAM_SSID)->value();
+      writeFile(SPIFFS, "/inputSSID.txt", inputMessage.c_str());
     }
-    // GET inputInt value on <ESP_IP>/get?inputInt=<inputMessage>
-    else if (request->hasParam(PARAM_INT)) {
-      inputMessage = request->getParam(PARAM_INT)->value();
-      writeFile(SPIFFS, "/inputInt.txt", inputMessage.c_str());
+    // GET inputPW value on <ESP_IP>/get?inputPW=<inputMessage>
+    else if (request->hasParam(PARAM_PW)) {
+      inputMessage = request->getParam(PARAM_PW)->value();
+      writeFile(SPIFFS, "/inputPW.txt", inputMessage.c_str());
     }
-    // GET inputFloat value on <ESP_IP>/get?inputFloat=<inputMessage>
-    else if (request->hasParam(PARAM_FLOAT)) {
-      inputMessage = request->getParam(PARAM_FLOAT)->value();
-      writeFile(SPIFFS, "/inputFloat.txt", inputMessage.c_str());
+    // GET inputPID value on <ESP_IP>/get?inputPID=<inputMessage>
+    else if (request->hasParam(PARAM_PID)) {
+      inputMessage = request->getParam(PARAM_PID)->value();
+      writeFile(SPIFFS, "/inputPID.txt", inputMessage.c_str());
     }
     else {
       inputMessage = "No message sent";
@@ -181,18 +181,18 @@ void setup(){
 }
 
 void loop() {
-  // To access your stored values on inputString, inputInt, inputFloat
-  String yourInputString = readFile(SPIFFS, "/inputString.txt");
-  Serial.print("*** Your inputString: ");
-  Serial.println(yourInputString);
+  // To access your stored values on inputSSID, inputPW, inputPID
+  String yourinputSSID = readFile(SPIFFS, "/inputSSID.txt");
+  Serial.print("*** Your inputSSID: ");
+  Serial.println(yourinputSSID);
   
-  int yourInputInt = readFile(SPIFFS, "/inputInt.txt").toInt();
-  Serial.print("*** Your inputInt: ");
-  Serial.println(yourInputInt);
+  int yourinputPW = readFile(SPIFFS, "/inputPW.txt").toInt();
+  Serial.print("*** Your inputPW: ");
+  Serial.println(yourinputPW);
   
-  float yourInputFloat = readFile(SPIFFS, "/inputFloat.txt").toFloat();
-  Serial.print("*** Your inputFloat: ");
-  Serial.println(yourInputFloat);
+  float yourinputPID = readFile(SPIFFS, "/inputPID.txt").toFloat();
+  Serial.print("*** Your inputPID: ");
+  Serial.println(yourinputPID);
   delay(5000);
 }
 
