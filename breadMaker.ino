@@ -19,8 +19,8 @@ const char index_html[] PROGMEM = R"rawliteral(
   <title>ESP Input Form</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>
-    function submitMessage() {
-      alert("Saved value to ESP SPIFFS");
+   function submitMessage() {
+      /*alert("Saved value to ESP SPIFFS");*/
       setTimeout(function(){ document.location.reload(false); }, 500);   
     }
   </script></head><body>
@@ -181,12 +181,13 @@ void setup(){
 }
 
 void loop() {
+  /*
   // To access your stored values on inputSSID, inputPW, inputPID
   String yourinputSSID = readFile(SPIFFS, "/inputSSID.txt");
   Serial.print("*** Your inputSSID: ");
   Serial.println(yourinputSSID);
   
-  int yourinputPW = readFile(SPIFFS, "/inputPW.txt").toInt();
+  int yourinputPW = readFile(SPIFFS, "/inputPW.txt")();
   Serial.print("*** Your inputPW: ");
   Serial.println(yourinputPW);
   
@@ -194,6 +195,7 @@ void loop() {
   Serial.print("*** Your inputPID: ");
   Serial.println(yourinputPID);
   delay(5000);
+  */
 }
 
 /*
