@@ -3,9 +3,6 @@
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 
-const char* ssid = "WIFI";
-const char* password = "PejsSkorstenSky";
-
 // webServer pages
 const char* PARAM_SSID = "inputSSID";
 const char* PARAM_PW = "inputPW";
@@ -90,6 +87,8 @@ String processor(const String& var){
   return String();
 }
 
+const char* ssid = "WIFI";
+const char* password = "PejsSkorstenSky";
 
 void WiFiStationConnected(WiFiEvent_t event, WiFiEventInfo_t info){
   Serial.println("Connected to AP successfully!");
@@ -108,6 +107,8 @@ void WiFiStationDisconnected(WiFiEvent_t event, WiFiEventInfo_t info){
   WiFi.begin(ssid, password);
 }
 
+
+
 void setup(){
   Serial.begin(115200);
 
@@ -124,10 +125,7 @@ void setup(){
     }
   #endif
 
-  // delete old config
-  WiFi.disconnect(true);
 
-  delay(1000);
 
   WiFi.onEvent(WiFiStationConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
   WiFi.onEvent(WiFiGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
@@ -138,13 +136,16 @@ void setup(){
   Serial.println(eventID);
   WiFi.removeEvent(eventID);*/
 
-  WiFi.begin(ssid, password);
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP("breadMaker", "PejsSkorstenSky");  
+  // delete old config
+  WiFi.disconnect(true);
+  delay(1000);
   Serial.println();
   Serial.println();
   Serial.println("Wait for WiFi... ");
+  WiFi.begin(ssid, password);
 
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP("breadMaker", "PejsSkorstenSky");  
 
   // Start the web server
   // Send web page with input fields to client
