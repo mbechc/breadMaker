@@ -90,22 +90,12 @@ String processor(const String& var){
 String ssid = "WIFI";
 String password = "PejsSkorstenSky";
 
-
 void setup(){
   Serial.begin(115200);
 
-  // Initialize SPIFFS
-  #ifdef ESP32
-    if(!SPIFFS.begin(true)){
-      Serial.println("An Error has occurred while mounting SPIFFS");
-      return;
-    }
-  #else
-    if(!SPIFFS.begin()){
-      Serial.println("An Error has occurred while mounting SPIFFS");
-      return;
-    }
-  #endif
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+  }
 
   WiFi.onEvent(WiFiStationConnected, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_CONNECTED);
   WiFi.onEvent(WiFiGotIP, WiFiEvent_t::ARDUINO_EVENT_WIFI_STA_GOT_IP);
